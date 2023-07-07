@@ -1,24 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import './Apps/markdownEditor'
+import './Apps/markdownPreview'
+import MarkdownEditor from "./Apps/markdownEditor";
+import {useState} from "react";
+import MarkdownPreview from "./Apps/markdownPreview";
+import {TextContext} from './Apps/TextContext';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    const [text,setText]=useState("");
+    const [fullScreen,setFullScreen]=useState({
+        fullScreenStatus:false,
+        previewFullScreen:false
+    });
+
+
+    const fullScreenEditor={
+        minHeight:'100vh',
+        resize:'none'
+    };
+
+
+    return (
+      <div style={{
+          display:'grid',
+          justifyItems:'center',
+      }}>
+        <TextContext.Provider value={{text,setText,fullScreen,setFullScreen}}>
+            <MarkdownEditor styleSheet={fullScreen.fullScreenStatus?
+                (fullScreen.previewFullScreen?{display:'none'} :fullScreenEditor)
+                :{}}/>
+            <MarkdownPreview styleSheet={fullScreen.fullScreenStatus?
+                (fullScreen.previewFullScreen? fullScreenEditor:{display:'none'})
+                :{}}/>
+        </TextContext.Provider>
+      </div>
   );
 }
 
